@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Location and Capacity</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, greenyellow, dodgerblue);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 150px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .submit-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background: linear-gradient(45deg, greenyellow, dodgerblue);
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(45deg, dodgerblue, greenyellow);
+            transition: background 0.3s ease;
+        }
+
+        #location {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        #capacityDisplay {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .end-trip-button {
+            margin-top: 20px;
+            background: linear-gradient(45deg, tomato, orangered);
+            text-decoration: none;
+        }
+        
+        .end-trip-button:hover {
+            background: linear-gradient(45deg, orangered, tomato);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bus Location</h1>
+        <p id="location"></p>
+        <br>
+        <form id="updateForm" action="/update_capacity" method="post">
+            {% csrf_token %}
+            <h2>Update Capacity for Bus <span id="busNumberDisplay">{{ bus_number }}</span></h2>
+            <input type="hidden" name="bus_number" value="{{ bus_number }}">
+            <input type="number" name="capacity" id="capacityInput" min="0" max="60">
+            <button type="submit" class="submit-button">Update Vacancies</button>
+            <p id="capacityDisplay"></p> <!-- Display success message here -->
+        </form>
+        
+        <script>
+        document.getElementById('updateForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+        
+            var formData = new FormData(this);
+        
+            fetch(this.action, {
+                method: this.method,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('capacityDisplay').textContent = data.message;
+                } else {
+                    alert(data.message); // Display error message if update fails
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating the capacity.');
+            });
+        });
+        </script>
+        
+        <p id="capacityDisplay"></p>
+        <br>
+        <h2>Bus Details</h2>
+        <p><strong>Bus Number:</strong> <span id="busNumber">{{ bus_number }}</span></p>
+        <p><strong>Starting Point:</strong> <span id="startPoint">{{ start_point }}</span></p>
+        <p><strong>Destination:</strong> <span id="destination">{{ destination }}</span></p><br><br><br>
+        <form action="end_trip" method='post'>
+            {% csrf_token %}
+            <input type="hidden" name="bus_number" value="{{ bus_number }}">
+            <button type="submit" id="endTripButton" class="submit-button end-trip-button">End Trip</button>
+        </form>
+    </div>
+
+    <script>
+        const locationText = document.getElementById("location");
+        /* function updateCapacity(){
+            var newCapacity = parseInt(document.getElementById("capacityInput").value);
+            if (!isNaN(newCapacity) && newCapacity >= 0 && newCapacity <= 60) {
+                capacity = newCapacity;
+                document.getElementById("capacityDisplay").textContent = "Vacancies updated to " + newCapacity + " seats.";
+                // Redirect to the URL where capacity is updated
+                window.location.href = "/update_capacity?bus_number=" + document.getElementById("busNumber").textContent + "&capacity=" + newCapacity;
+            } else {
+                document.getElementById("capacityDisplay").textContent = "Please enter a valid capacity between 0 and 60.";
+            }
+        } */
+        
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(showPosition, showError, { enableHighAccuracy: true });
+            } else {
+                locationText.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            locationText.innerHTML = `Latitude: ${latitude}<br>Longitude: ${longitude}`;
+            sendCoordinates(position);
+        }
+
+        function sendCoordinates(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const busNumber = document.getElementById("busNumber").textContent; 
+            fetch('update_coordinates', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') 
+                },
+                body: JSON.stringify({
+                    bus_number: busNumber,
+                    latitude: latitude,
+                    longitude: longitude,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    locationText.innerHTML = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    locationText.innerHTML = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    locationText.innerHTML = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    locationText.innerHTML = "An unknown error occurred.";
+                    break;
+            }
+        }
+
+        // Update location every 5 second
+        setInterval(getLocation, 10000);
+    </script>
+</body>
+</html>

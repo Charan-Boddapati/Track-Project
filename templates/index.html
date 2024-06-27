@@ -1,0 +1,262 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IITG Vehicle Tracking System</title>
+    <style>
+        /* Resetting default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh; /* Set minimum height to full viewport height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 95%;
+            margin: 0 auto;
+            display: flex;
+            justify-content:space-between;
+        }
+
+        header {
+            background: orange;
+            color: #fff;
+            padding: 10px 0;
+        }
+
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            flex-grow: 1;
+        }
+
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ff6600;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background: #cc5500;
+        }
+
+        footer {
+            background:green;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto; /* Push footer to the bottom */
+        }
+
+        /* Updated styles for content layout */
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .text-content {
+            width: 50%; /* Adjust the width as needed */
+        }
+
+        .image-content {
+            margin-top: 20px; /* Add some space between text and image */
+        }
+
+        .zib {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            color: red;
+        }
+        .content-wrapper {
+        display: flex;
+        justify-content: space-between;
+        overflow: hidden; /* Ensure content and image don't overflow */
+    }
+
+    .text-content {
+        width: 50%; /* Adjust the width as needed */
+        animation: slideInLeft 1s ease forwards; /* Animation for sliding from right to left */
+    }
+    .btn2{
+        display: inline-block;
+         padding: 10px 20px;
+        text-decoration: none;
+        background: rgb(102, 97, 238);
+        border-radius: 40px;
+        color:white;
+        margin-right: 25px;
+        /* font-size: 20px; */
+    }
+
+    .image-content {
+        margin-top: 20px; /* Add some space between text and image */
+        animation: slideInRight 1.5s ease forwards; /* Animation for sliding from left to right */
+        width:15%;
+    }
+    .image-content2 {
+        margin-top: 20px; /* Add some space between text and image */
+        animation: slideInRight2 2s ease forwards; /* Animation for sliding from left to right */
+        width:15%;
+        
+    }
+
+    @keyframes slideInLeft {
+        from {
+            transform: translateX(-100%); /* Start from the left */
+        }
+        to {
+            transform: translateX(0); /* Stop at the original position */
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%); /* Start from the right */
+        }
+        to {
+            transform: translateX(0); /* Stop at the original position */
+        }
+    }
+    @keyframes slideInRight2{
+        from {
+            transform: translateY(-100%); /* Start from the right */
+        }
+        to {
+            transform: translateY(250px); /* Stop at the original position */
+        }
+    }
+    .text-content img{
+        height:200px;
+        width: 230px;
+        margin-left: 740px;
+    }
+
+    .messages {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0;
+      }
+      
+      .messages li {
+        background-color: #f2dede;
+        border: 1px solid #ebccd1;
+        color: #a94442;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        position: relative;
+      }
+      
+      .messages li button.close {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+      }
+      
+      /* Style for success message */
+      .messages li.success {
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+        color: #3c763d;
+      }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo"><h2>IITG <span class="auto-type"></span> Tracking System</h2></div>
+            <a href="admin"class="btn2" >Admin Login</a>
+            <a href="service"class="btn2">Service Provider Login</a>
+        </div>
+
+    </header>
+
+    <section id="content">
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="text-content">
+                    
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    {{ message }}
+                    <button class="close" onclick="this.parentElement.style.display='none'">&times;</button>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+                    <br><br>
+                    <h2><center>Are you tired of waiting for buses or E-rickshaws at IITG?</center></h2><br>
+                    <h1 class="zib"><center>HERE WE ARE</center></h1><br>
+                    
+                    <h2>Get Started Today:</h2>
+                    <p>Ready to experience a seamless commute at IIT Guwahati? Click below to explore our services and start tracking your preferred mode of transportation now!</p>
+                    <br><a href="signin" class="btn">Get Started ➔</a>
+                    <div class="image-content">
+                        <img src="static/auto-rickshaw.webp" alt="Small Bus Image"><br>
+                    </div>         
+                </div>
+                <div class="image-content">
+                    <img src="static/fim.png" alt="Small Bus Image"><br>
+                </div><div class="image-content2">
+                    <img src="static/ano.jpeg" alt="Small Bus Image">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container2">
+            <p>&copy; 2024 IITG Vehicle Tracking System. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script>
+        var typed = new Typed(".auto-type",{
+            strings:["Vehicle","Bus","Rickshaw"],
+            typeSpeed:120,
+            backSpeed:120,
+            loop:true,
+            cursorChar: ""
+        })
+    </script>
+</body>
+</html>
+
+
+
+

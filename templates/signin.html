@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@600&display=swap");
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(45deg, greenyellow, dodgerblue);
+  font-family: "Sansita Swashed", cursive;
+}
+.center {
+  position: relative;
+  padding: 50px 50px;
+  background: #fff;
+  border-radius: 10px;
+}
+.center h1 {
+  font-size: 2em;
+  border-left: 5px solid dodgerblue;
+  padding: 10px;
+  color: #000;
+  letter-spacing: 5px;
+  margin-bottom: 60px;
+  font-weight: bold;
+  padding-left: 10px;
+}
+.center .inputbox {
+  position: relative;
+  width: 300px;
+  height: 50px;
+  margin-bottom: 50px;
+}
+.center .inputbox input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: 2px solid #000;
+  outline: none;
+  background: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.2em;
+}
+.center .inputbox:last-child {
+  margin-bottom: 0;
+}
+.center .inputbox span {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  font-size: 1em;
+  transition: 0.6s;
+  font-family: sans-serif;
+}
+.center .inputbox input:focus ~ span,
+.center .inputbox input:valid ~ span {
+  transform: translateX(-13px) translateY(-35px);
+  font-size: 1em;
+}
+.center .inputbox [type="submit"] {
+  width: 50%;
+  background: dodgerblue;
+  color: #fff;
+  border: #fff;
+}
+.center .inputbox:hover [type="submit"] {
+  background: linear-gradient(45deg, greenyellow, dodgerblue);
+}
+.messages {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.messages li {
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  color: #a94442;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.messages li button.close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Style for success message */
+.messages li.success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+
+    </style>
+</head>
+<body>
+  
+    <div class="center">
+        <h1>Welcome to Vehicle tracking System</h1>
+        <form action="signin" method="post">
+        {% csrf_token %}
+            <div class="inputbox">
+                <input id="username" name="username" type="text" required="required">
+                <span>Outlook mail</span>
+            </div>
+            <div class="inputbox">
+                <input type="password" id="pass1" name="pass1" required="required">
+                <span>Enter your Password</span>
+            </div>
+          <div class="inputbox">
+            <input type="submit" value="Submit">
+          </div>
+        </form><p>Don't have an account? <a href="signup"> Sign Up</a></p>
+      </div>
+    
+      <script>
+        function validateEmail() {
+            var emailInput = document.getElementById("email");
+            var email = emailInput.value.trim();
+            if (!email.endsWith("@iitg.ac.in")) {
+                alert("Email must end with @iitg.ac.in");
+                return false;
+            }
+            return true;
+        }
+    </script>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">
+            {{ message }}
+            <button class="close" onclick="this.parentElement.style.display='none'">&times;</button>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+      
+</body>
+</html>

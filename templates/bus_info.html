@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1e90ff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #1e90ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #007bff;
+        }
+        a {
+            padding: 8px 16px;
+            background-color: #1e90ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration:none;
+        }
+
+        a:hover {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bus Information</h1>
+    <table>
+        <tr>
+            <th>Bus Number</th>
+            <th>Seating Capacity</th>
+            <th>Longitude</th>
+            <th>Latitude</th>
+            <th>Starting Point</th>
+            <th>Destination</th>
+            <th>Running Status</th>
+            <th>Map creation</th>
+            <th>View map</th>
+        </tr>
+        {% for bus in bus_info %}
+        <tr>
+            <td>{{ bus.bus_number }}</td>
+            <td>{{ bus.seating_capacity }}</td>
+            <td>{{ bus.longitude }}</td>
+            <td>{{ bus.latitude }}</td>
+            <td>{{ bus.starting_point }}</td>
+            <td>{{ bus.destination }}</td>
+            <td>{% if bus.is_running %}Running{% else %}Halted{% endif %}</td>
+            <td>
+                <button onclick="getLocation('{{ bus.bus_number }}')">Generate map</button>
+            </td>
+            <td>
+                <a href="map">View map</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div style="text-align: center; margin-top: 20px;">
+        <form action="front_page" method="post">
+            {% csrf_token %}
+            <button type="submit">Go to Profile Page</button>
+        </form>
+    </div>
+    <script>
+        function getLocation(busNumber) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    showPosition(position, busNumber);
+                }, showError, { enableHighAccuracy: true });
+            } else {
+                locationText.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+    
+        function showPosition(position, busNumber) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            sendCoordinates(position, busNumber);
+        }
+    
+        function sendCoordinates(position, busNumber) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            fetch('generate_map', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') 
+                },
+                body: JSON.stringify({
+                    bus_number: busNumber,
+                    latitude: latitude,
+                    longitude: longitude,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    locationText.innerHTML = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    locationText.innerHTML = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    locationText.innerHTML = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    locationText.innerHTML = "An unknown error occurred.";
+                    break;
+            }
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autorickshaw Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1e90ff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #1e90ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Autorickshaw Information</h1>
+    
+    <table border="1">
+        <tr>
+            <th>Vehicle Number</th>
+            <th>Driver Name</th>
+            <th>Running Status</th>
+            <th>Contact Number</th>
+            <th>Longitude</th>
+            <th>Latitude</th>
+            <th>Pending bookings</th>
+            <th>View Location</th>
+            
+        </tr>
+        {% for autorickshaw in rickshaw_info %}
+        <tr>
+            <td>{{ autorickshaw.vehicle_number }}</td>
+            <td>{{ autorickshaw.driver_name }}</td>
+            <td>{% if autorickshaw.is_running %}Running{% else %}Halted{% endif %}</td>
+            <td>{{ autorickshaw.contact_number }}</td>
+            <td>{{ autorickshaw.longitude }}</td>
+            <td>{{ autorickshaw.latitude }}</td>
+            <td>{{ autorickshaw.pending_bookings_count }}</td>
+            <td>
+                <form action="generate_map2" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="vehicleNumber" value="{{ autorickshaw.vehicle_number }}">
+                    <button type="submit">View</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <form action="front_page" method="post">
+            {% csrf_token %}
+            <button type="submit">Go to Profile Page</button>
+        </form>
+    </div>
+</body>
+</html>

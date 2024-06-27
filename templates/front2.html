@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transport Options</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(45deg, #e3e3e3, #f5f5f5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 20px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        margin-bottom: 50px;
+        color: #333;
+        font-size: 36px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .options {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+
+    .option {
+        width: 300px;
+        height: 300px;
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        position: relative;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .option img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .option h2 {
+        font-size: 24px;
+        color: #fff;
+        padding: 10px;
+        margin: 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .bus {
+        background-image: url('small_bus.png');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .rickshaw {
+        background-image: url('rickshaw.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .option:hover {
+        transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+        .option {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            flex-direction: column;
+        }
+    }
+    
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hello,</h1>
+    <h1>Choose The service you are providing</h1>
+    <div class="options">
+      <a href="service_provider" class="option bus">
+        <img src="static\small_bus.png" alt="Bus">
+        <h2>Bus</h2>
+      </a>
+      <a href="service_provider2" class="option rickshaw">
+        <img src="static/rickshaw.jpg" alt="Rickshaw">
+        <h2>Rickshaw</h2>
+      </a>
+    </div>
+</div>
+
+</div>
+</html>
