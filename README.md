@@ -1,4 +1,4 @@
-- Download the ZIP file and unzip it to a specific folder
+- Clone repository and download files to a required folder.
 - Open command prompt and change directory to that folder.
   - Use the following command:
     ```bash
