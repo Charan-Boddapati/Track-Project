@@ -76,6 +76,7 @@
 - E-Rickshaw (default)credentials:
     - **Rickshaw_number:** AR1234
     - **Vehicle_key:** AR1234pass
+- Here we have option to update the number of pre-bookings.
 
 #### Admin Login
 
