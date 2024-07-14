@@ -1,5 +1,6 @@
 
 # Vehicle Tracking System
+The Vehicle Tracking System is a Django-based web application designed to track and manage various transport vehicles, including buses and e-rickshaws. It integrates real-time location tracking using Folium maps and provides different login options for users, service providers (bus conductors and rickshaw drivers), and administrators. The system also utilizes Outlook email integration for user notifications.
 
 ## Getting Started
 
