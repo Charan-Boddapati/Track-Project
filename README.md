@@ -83,3 +83,17 @@
 - Admin login credentials:
     - **Username:** admin
     - **Password:** admin12345
+Certainly! Here's the updated "Future Improvements" section including the additional point about IITG bus passes:
+
+---
+
+## Future Improvements
+
+- **Google Maps Integration**: Integrate Google Maps to display distance and estimated travel time based on real-time traffic conditions.
+  
+- **Deployment**: Deploy the application to a cloud platform (e.g., Heroku, AWS) for public access and scalability.
+  
+- **Additional Transport Options**: Expand tracking capabilities to include other transport modes such as ferry and cab services.
+  
+- **IITG Bus Pass Integration**: Implement integration with IITG bus passes to streamline entry procedures, reducing the need for manual checks every time someone enters IITG premises.
+
